@@ -1,0 +1,23 @@
+name: kvit
+channels:
+  - defaults
+  - pytorch
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pandas
+  - numpy
+  - matplotlib
+  - seaborn
+  - pytorch
+  - torchvision
+  - scikit-learn
+  - imbalanced-learn
+  - pillow
+  - tqdm
+  - transformers
+  - datasets>=2.14.5
+  - accelerate=>0.27
+  - mlflow
+  - opencv
+
