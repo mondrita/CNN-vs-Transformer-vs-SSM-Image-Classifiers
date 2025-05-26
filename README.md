@@ -1,51 +1,76 @@
-# Comparative Analysis of Attention-Based, Convolutional, and SSM-Based Models for Multi-Domain Image Classification
+# Comparing Attention, CNNs, and SSMs for Multi-Domain Image Recognition
 
 
 ## Abstract
-The increasing frequency and severity of environmental and societal challenges, such as natural disasters, medical diagnostics, and agricultural threats, require development of efficient and scalable detection and classification systems. Autonomous technologies with real-time processing capabilities offer significant potential but face challenges like network delays, adverse conditions, and bandwidth limitations for transporting image or video data. Lightweight and fast models deployed on edge devices, such as surveillance drones, portable diagnostic tools, or agricultural sensors, can address these constraints effectively. Most modern-day State-Of-The-Art (SOTA) object detection and classification architectures are primarily based on Transformers and its underlying concept of attention, Unfortunately, this significant improvement in accuracy comes at the cost of a substantial increase in computation. Recently, State-space models (SSMs) have emerged as a promising alternative to transformer-based architectures with their enhanced computational efficiency and reasoning capabilities. The application of SSMs have potential in areas where long-range dependence on data is crucial but computational efficiency is particularly important. This research explores the application of SSMs, particularly Vision Mamba, in diverse domains: wildfire detection, plant disease identification, and skin cancer diagnostics. Furthermore, empirical comparisons are made with Attention-Based and Convolutional models in these domains to better evaluate the capabilities of SSM-based Vision backbones. Finally, the feasibility of knowledge distillation in Vision Mamba is examined using the information gathered from the thorough comparisons. This research demonstrates that Mamba models achieve promising accuracy, comparable to some Transformer-based models, while operating at sub-quadratic time complexity. In the context of wildfire detection, knowledge distillation further improved VisionMamba Tiny’s accuracy from 70.6% to 85.32%, highlighting its potential for lightweight, high-performance applications in critical scenarios.
+Multi-domain image recognition presents a rich and challenging area for computer vision research, with applications ranging from natural disaster detection to medical and agricultural diagnostics and beyond. However, deploying such detection systems in resource-constrained environments has become increasingly challenging due to the advent of ever-deeper Convolutional Neural Network (CNN) architectures and resource-intensive Transformer architectures with their underlying attention mechanism. As state-of-the-art image classification becomes ever more resource-hungry, the search for efficient alternatives has gained momentum. State-space models (SSMs) have emerged as a viable lightweight alternative to Transformers, though their potential in vision tasks remains unexplored. In this research, we conduct a comparative, performance-focused, study of a leading SSM-based vision backbone, Vision Mamba (ViM), against well-established CNN and Transformer-based backbones. We evaluate their performance across three diverse tasks: wildfire detection, plant disease identification, and skin cancer diagnosis. Our results highlight that while CNN models consistently achieved higher accuracy, ViM models consume significantly less VRAM. Moreover, the ViM Tiny model(7.06M) matched the accuracy of the 12×larger DeiT Base model(85.80M) in the wildfire detection task. The ViM models also converged faster than their counterparts in the same parameter range for all tasks. Furthermore, knowledge distillation on the Vim Tiny model boosted its accuracy from 70.6% to 85.32% in the wildfire detection task, closely matching the accuracy of the best-performing EfficientNet-B7 (66M). These findings underscore the potential of SSM-based models for producing lightweight and performant vision systems for resource-constrained deployments.
+
+**Keywords: State-Space Models, Vision Mamba, Mamba, Knowledge Distillation, Multi-Domain Applications, Attention-Based Models, and Convolutional Models**
 
 ## Datasets
-The following datasets were used in this research:
 
-1. **The FLAME dataset: Aerial Imagery Pile burn detection using drones (UAVs)**
-   - **Description**: The training dataset consists of 39,375 frames (1.3 GB) in JPEG format and some samples are shown in \ref{fig:flame-sample}. The test dataset consists of 8,617 frames (5.2 GB), also in JPEG format. Both the training and testing dataset images have been labeled in fire and no-fire folders.
-   - **Source**: [https://ieee-dataport.org/open-access/flame-dataset-aerial-imagery-pile-burn-detection-using-drones-uavs]
-   - **Usage**: Used for training, validating and testing wildfire detection
+The following publicly available datasets were used in this research to train and evaluate CNN, Transformer, and SSM-based models across multiple domains:
 
-2. **Skin Cancer: Malignant vs. Benign**
-   - **Description**:The training data comprises 2637 images while the test data contains 660 images. The training and test datasets have been labeled in malignant and benign folders and resized to 224 x 224 pixels. 
-   - **Source**: [https://www.kaggle.com/datasets/fanconic/skin-cancer-malignant-vs-benign]
-   - **Usage**: Used for training and testing skin cancer detection
+---
 
-3. **PlantVillage Dataset**
-   - **Description**: Contains images of 15 different catgories of plant diseases. 
-   - **Source**: [https://www.kaggle.com/datasets/emmarex/plantdisease]
-   - **Usage**: Used for training, validating and testing plant disease classification
-  
+### 1. 🔥 **FLAME Dataset: Aerial Imagery for Wildfire Detection**
+- **Description**: High-resolution aerial frames captured via UAVs for pile burn detection. The training set contains **39,375 labeled JPEG images** (~1.3 GB), and the test set contains **8,617 labeled images** (~5.2 GB), categorized into `fire` and `no-fire` folders.
+- **Source**: [IEEE Dataport – FLAME Dataset](https://ieee-dataport.org/open-access/flame-dataset-aerial-imagery-pile-burn-detection-using-drones-uavs)
+- **Usage**: Used for training, validation, and evaluation in **wildfire detection**.
 
-  ## Models Used
-The following models were utilized in this research:
+---
 
-- DeiT-Base Distilled Patch16-224
-- Swin Transformer
-- PVT v2
-- ViT_b_16
-- ResNet18
-- ResNet-50
-- VGG16
-- InceptionV3
-- Xception
-- MobileNetV2
-- ConvNext Base
-- ConvNextv2 Base
-- EfficientNet B0
-- EfficientNet B7
-- VisionMamba-tiny-patch16
-- VisionMamba-small-patch16
-- VisionMamba-base-patch16
+### 2. 🩺 **Skin Cancer: Malignant vs. Benign**
+- **Description**: A dermoscopic image dataset containing **2,637 training** and **660 test** images, labeled into `malignant` and `benign` folders. All images were resized to **224×224 pixels** for model compatibility.
+- **Source**: [Kaggle – Skin Cancer Dataset](https://www.kaggle.com/datasets/fanconic/skin-cancer-malignant-vs-benign)
+- **Usage**: Used for binary classification in **skin cancer detection**.
+
+---
+
+### 3. 🌿 **PlantVillage Dataset**
+- **Description**: A large-scale plant disease image dataset with **15 different disease categories** across multiple crop species. All images were standardized to **224×224 resolution** and categorized by disease type.
+- **Source**: [Kaggle – PlantVillage](https://www.kaggle.com/datasets/emmarex/plantdisease)
+- **Usage**: Used for **multi-class classification** in plant disease detection tasks.
 
 
-### Note
+## Models Used
+
+The following deep learning models were utilized in this study, grouped into three categories based on architectural paradigms:
+
+| Convolutional Neural Networks (CNNs) | Transformer-Based          | State Space Models (SSMs)        |
+|----------------------------------------|----------------------------------------|-------------------------------------|
+| ResNet-18                              | ViT_B_16                                | VisionMamba-Tiny-Patch16           |
+| ResNet-50                              | Swin Transformer                        | VisionMamba-Small-Patch16          |
+| VGG-16                                  | PVT v2                                  | VisionMamba-Base-Patch16           |
+| InceptionV3                            | DeiT-Base Distilled Patch16-224         |                                     |
+| Xception                               | ConvNext Base                           |                                     |
+| MobileNetV2                            | ConvNextv2 Base                         |                                     |
+| EfficientNet B0                        |                                          |                                     |
+| EfficientNet B7                        |                                          |                                     |
+
+> ✅ *All models were fine-tuned and evaluated on the same datasets to ensure fair comparison across architectural types.*
+
+## Evaluation Metrics
+
+To assess model performance across multiple domains, we used the following metrics:
+
+### 🔹 Performance Metrics
+- **Accuracy** – Overall correctness of the model.
+- **Precision** – How many of the predicted positives were actually correct.
+- **Recall** – How many of the actual positives were correctly predicted.
+- **F1-Score** – Harmonic mean of Precision and Recall.
+- **AUC-ROC** – Measures model's ability to distinguish between classes.
+- **Top-5 Accuracy** *(for PlantVillage)* – Measures whether the correct label is within the top 5 predictions.
+
+### 🔹 Computational Efficiency Metrics
+- **FLOPs (GFLOPs)** – Model complexity in terms of floating-point operations.
+- **Total Parameters** – Number of parameters in the model.
+- **Trainable Parameters** – Parameters updated during training.
+- **Inference Time** – Time taken to predict one image.
+- **Throughput (FPS)** – Number of images processed per second.
+- **GPU Memory Utilization** – Peak memory used during inference.
+
+
+### Mamba Training Details
 The training and testing of the Mamba model are thoroughly documented in a separate repository. You can find it [here](https://github.com/avonoeia/VisionMamba)
 
 
